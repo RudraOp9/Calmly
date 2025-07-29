@@ -58,8 +58,8 @@ app/": {
 - No notification
 
 ## Demo Video
-
-<video src="/screenshots/vid.mkv" width="500" height="250" controls></video>
+if video is not visible, please see screenshots directory.
+<video src="/screenshots/vid.mkv" width="500" height="250" controls type="video/mp4"></video>
 
 ##  Screenshots
 
