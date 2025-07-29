@@ -1,0 +1,28 @@
+<resources>
+    <string name="app_name">Calmly</string>
+    <string name="meditation_tab">Meditation</string>
+    <string name="sleep_tab">Sleep</string>
+    <string name="now_playing">Now Playing</string>
+    <string name="play">Play</string>
+    <string name="pause">Pause</string>
+    <string name="stop">Stop</string>
+    <string name="set_timer">Set Timer</string>
+    <string name="no_timer">No Timer</string>
+    <string name="minutes">minutes</string>
+
+    <!-- Sound titles -->
+    <string name="forest_rain">Forest Rain</string>
+    <string name="ocean_waves">Ocean Waves</string>
+    <string name="campfire">Campfire</string>
+    <string name="birds_chirping">Birds Chirping</string>
+    <string name="wind_chimes">Wind Chimes</string>
+    <string name="white_noise">White Noise</string>
+    <string name="brown_noise">Brown Noise</string>
+    <string name="fan_sound">Fan Sound</string>
+    <string name="deep_hum">Deep Hum</string>
+    <string name="night_sounds">Night Sounds</string>
+
+    <!-- Notification -->
+    <string name="notification_channel_name">Media Playback</string>
+    <string name="notification_channel_description">Controls for meditation and sleep sounds</string>
+</resources>
