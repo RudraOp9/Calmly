@@ -33,7 +33,7 @@ fun MainScreen(
             currentSound = playbackState.currentSound,
             isPlaying = playbackState.isPlaying,
             onPlayPauseClick = { viewModel.pauseResumeSound(context) },
-            onStopClick = { viewModel.stopCurrentSound() }
+            onStopClick = { viewModel.stopCurrentSound(context) }
         )
 
         // Tab Row with soft Material 3 design

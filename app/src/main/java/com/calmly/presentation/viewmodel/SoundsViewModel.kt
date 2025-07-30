@@ -63,7 +63,7 @@ class SoundsViewModel(
         _isLoading.value = true
         // Stop current sound if playing
         if (_playbackState.value.isPlaying) {
-            stopSoundUseCase(false)
+            stopSoundUseCase(false,context)
         }
         playSoundUseCase(sound, timerMinutes, context)
             .onSuccess {
@@ -88,9 +88,9 @@ class SoundsViewModel(
 
     }
 
-    fun stopCurrentSound() {
+    fun stopCurrentSound(context: Context) {
         viewModelScope.launch {
-            stopSoundUseCase(pause = false)
+            stopSoundUseCase(pause = false,context)
                 .onSuccess {
                     _playbackState.value = _playbackState.value.copy(
                         isPlaying = false,
@@ -100,9 +100,9 @@ class SoundsViewModel(
         }
     }
 
-    fun pauseCurrentSound() {
+    fun pauseCurrentSound(context: Context) {
         viewModelScope.launch {
-            stopSoundUseCase(pause = true)
+            stopSoundUseCase(pause = true, context)
                 .onSuccess {
                     _playbackState.value = _playbackState.value.copy(
                         isPlaying = false,
@@ -126,7 +126,7 @@ class SoundsViewModel(
 
     fun pauseResumeSound(context: Context) {
         if (_playbackState.value.isPlaying) {
-            pauseCurrentSound()
+            pauseCurrentSound(context)
         } else {
                _playbackState.value.currentSound?.let { sound ->
                    resumeCurrentSound(sound, _playbackState.value.timerMinutes,context)

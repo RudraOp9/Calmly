@@ -62,9 +62,22 @@ class MediaPlaybackService() : Service() {
                playSound(sound, timerMinutes)
             }
             ACTION_RESUME -> {
-                currentSound?.let { sound ->
+                if (currentSound != null){
                     resumePlayback()
+                }else{
+                    val id = intent.getStringExtra("id")
+                    val title = intent.getStringExtra("title")
+                    val subtitle = intent.getStringExtra("subtitle")
+                    val soundRes = intent.getIntExtra("soundRes", 0)
+                    val category = intent.getIntExtra("category",0)
+                    val thumbRes = intent.getIntExtra("thumbRes",0)
+                    val duration = intent.getLongExtra("duration",0L)
+                    val sound = Sound(id!!, title!!, subtitle!!, SoundCategory.entries[category], soundRes,thumbRes,duration)
+                    val timerMinutes = intent.getIntExtra("timerMinutes", 0)
+                    playSound(sound, timerMinutes)
+
                 }
+
             }
 
             ACTION_PAUSE -> pausePlayback()
@@ -146,6 +159,7 @@ class MediaPlaybackService() : Service() {
 
         // Remove notification
         stopForeground(STOP_FOREGROUND_REMOVE)
+        stopSelf()
 
         Log.d("MediaService", "Playback stopped")
     }
@@ -172,7 +186,7 @@ class MediaPlaybackService() : Service() {
 
         Log.e("tagy", "trying to send notification")
         try {
-            if (notificationManager == null) {
+            if (notificationManager == null) {1111
                 notificationManager = CalmlyNotificationManager()
             }
             val notification =
