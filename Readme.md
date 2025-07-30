@@ -59,6 +59,7 @@ app/": {
 
 ## Demo Video
 if video is not visible, please see screenshots directory.
+https://github.com/RudraOp9/Calmly/raw/refs/heads/master/screenshots/vid.mkv
 <video src="/screenshots/vid.mkv" width="500" height="250" controls type="video/mp4"></video>
 
 ##  Screenshots
