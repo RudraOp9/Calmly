@@ -21,11 +21,10 @@ val appModule = module {
     single<PreferencesRepository> { PreferencesRepositoryImpl(get()) }
 
     // Service Layer
-    single { MediaPlaybackService() }
 
     // Domain Layer
-    single { PlaySoundUseCase(get()) }
-    single { StopSoundUseCase(get()) }
+    single { PlaySoundUseCase() }
+    single { StopSoundUseCase() }
 
     // Presentation Layer
     viewModel { SoundsViewModel(get(), get(), get(), get()) }

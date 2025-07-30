@@ -13,6 +13,7 @@ import android.util.Log
 import androidx.core.app.NotificationCompat
 import com.calmly.R
 import com.calmly.data.models.Sound
+import com.calmly.data.models.SoundCategory
 import com.calmly.service.CalmlyNotificationManager.Companion.CHANNEL_ID
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -49,6 +50,18 @@ class MediaPlaybackService() : Service() {
         notificationManager = CalmlyNotificationManager()
         when (intent?.action) {
             ACTION_PLAY -> {
+                val id = intent.getStringExtra("id")
+                val title = intent.getStringExtra("title")
+                val subtitle = intent.getStringExtra("subtitle")
+                val soundRes = intent.getIntExtra("soundRes", 0)
+                val category = intent.getIntExtra("category",0)
+                val thumbRes = intent.getIntExtra("thumbRes",0)
+                val duration = intent.getLongExtra("duration",0L)
+                val sound = Sound(id!!, title!!, subtitle!!, SoundCategory.entries[category], soundRes,thumbRes,duration)
+                val timerMinutes = intent.getIntExtra("timerMinutes", 0)
+               playSound(sound, timerMinutes)
+            }
+            ACTION_RESUME -> {
                 currentSound?.let { sound ->
                     resumePlayback()
                 }
@@ -60,12 +73,14 @@ class MediaPlaybackService() : Service() {
         return START_STICKY
     }
 
-    fun playSound(sound: Sound, timerMinutes: Int = 0, context: Context) {
+    fun playSound(sound: Sound, timerMinutes: Int = 0) {
         try {
             // Release any existing media player
             mediaPlayer?.release()
             // Create new media player
-            mediaPlayer = MediaPlayer.create(context, sound.soundRes).apply {
+            mediaPlayer = MediaPlayer().apply {
+                setDataSource(this@MediaPlaybackService, getRawUri(sound.soundRes))
+                prepareAsync()
                 isLooping = true
                 setOnPreparedListener {
                     currentSound = sound
@@ -157,7 +172,11 @@ class MediaPlaybackService() : Service() {
 
         Log.e("tagy", "trying to send notification")
         try {
-            val notification = createNotification(sound, isPlaying)
+            if (notificationManager == null) {
+                notificationManager = CalmlyNotificationManager()
+            }
+            val notification =
+                notificationManager?.createNotification(this@MediaPlaybackService, sound,isPlaying)
             // Use ServiceCompat.startForeground to be compatible with older Android versions
             startForeground(1, notification)
             /*      startForeground(
@@ -176,59 +195,12 @@ class MediaPlaybackService() : Service() {
         Log.d("MediaService", "Service destroyed")
     }
 
-    private fun createNotification(sound: Sound?, isPlaying: Boolean): Notification {
-        val style = androidx.media.app.NotificationCompat.MediaStyle()
-            .setShowActionsInCompactView(0, 1)
-
-       /* fun createPendingIntent(action: String): PendingIntent {
-            val intent = Intent(this@MediaPlaybackService, MediaPlaybackService::class.java).apply {
-                this.action = action
-            }
-            return PendingIntent.getService(
-                this@MediaPlaybackService,
-                action.hashCode(),
-                intent,
-                PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
-            )
-        }
-
-        val playPauseAction = if (isPlaying) {
-            NotificationCompat.Action(
-                R.drawable.ic_pause,
-                "Pause",
-                createPendingIntent(MediaPlaybackService.ACTION_PAUSE)
-            )
-        } else {
-            NotificationCompat.Action(
-                R.drawable.ic_play,
-                "Play",
-                createPendingIntent(MediaPlaybackService.ACTION_PLAY)
-            )
-        }
-
-        val stopAction = NotificationCompat.Action(
-            R.drawable.ic_stop,
-            "Stop",
-            createPendingIntent(MediaPlaybackService.ACTION_STOP)
-        )*/
-
-        return NotificationCompat.Builder(this, CHANNEL_ID)
-            .setStyle(style)
-            .setContentTitle(sound?.title)
-            .setContentText(sound?.subtitle)
-         /*   .addAction(playPauseAction)
-            .addAction(
-                stopAction
-            )*/
-            .setSmallIcon(R.drawable.ic_launcher_background)
-            .build()
-    }
-
 
     companion object {
         const val ACTION_PLAY = "com.calmly.ACTION_PLAY"
         const val ACTION_PAUSE = "com.calmly.ACTION_PAUSE"
         const val ACTION_STOP = "com.calmly.ACTION_STOP"
+        const val ACTION_RESUME = "com.calmly.ACTION_RESUME"
         const val NOTIFICATION_ID = 1
     }
 
