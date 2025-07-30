@@ -47,19 +47,18 @@ class MediaPlaybackService() : Service() {
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
         super.onStartCommand(intent, flags, startId)
         // Handle media button actions from notification
-        notificationManager = CalmlyNotificationManager()
         when (intent?.action) {
             ACTION_PLAY -> {
-                val id = intent.getStringExtra("id")
-                val title = intent.getStringExtra("title")
-                val subtitle = intent.getStringExtra("subtitle")
+                val id = intent.getStringExtra("id")!!
+                val title = intent.getStringExtra("title")!!
+                val subtitle = intent.getStringExtra("subtitle")!!
                 val soundRes = intent.getIntExtra("soundRes", 0)
-                val category = intent.getIntExtra("category",0)
-                val thumbRes = intent.getIntExtra("thumbRes",0)
-                val duration = intent.getLongExtra("duration",0L)
-                val sound = Sound(id!!, title!!, subtitle!!, SoundCategory.entries[category], soundRes,thumbRes,duration)
+                val category = intent.getIntExtra("category", 0)
+                val thumbRes = intent.getIntExtra("thumbRes", 0)
+                val duration = intent.getLongExtra("duration", 0L)
+                val sound = Sound(id, title, subtitle, SoundCategory.entries[category], soundRes, thumbRes, duration)
                 val timerMinutes = intent.getIntExtra("timerMinutes", 0)
-               playSound(sound, timerMinutes)
+                playSound(sound, timerMinutes)
             }
             ACTION_RESUME -> {
                 if (currentSound != null){
@@ -88,9 +87,7 @@ class MediaPlaybackService() : Service() {
 
     fun playSound(sound: Sound, timerMinutes: Int = 0) {
         try {
-            // Release any existing media player
             mediaPlayer?.release()
-            // Create new media player
             mediaPlayer = MediaPlayer().apply {
                 setDataSource(this@MediaPlaybackService, getRawUri(sound.soundRes))
                 prepareAsync()
@@ -159,8 +156,6 @@ class MediaPlaybackService() : Service() {
 
         // Remove notification
         stopForeground(STOP_FOREGROUND_REMOVE)
-        stopSelf()
-
         Log.d("MediaService", "Playback stopped")
     }
 
