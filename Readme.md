@@ -6,7 +6,7 @@ A modern Android calm music player app that uses Jetpack Compose with Kotlin.
 
 # Challenges
 
-- Couldn't implement notification because i used service directly in DI ?
+- Nothing :)
 
 # 🛠️ Tech Stack & Open-source libraries
 - Minimum SDK level 27 (android 8.1) to SDK level 36 (android 16)
@@ -53,10 +53,6 @@ app/": {
 - A timer can be set to auto-stop playback.
 - The app remembers the last played sound, restoring it on restart for a consistent, user-friendly experience.
 
-## Some Bugs
-- Now playing has some ui issus
-- No notification
-
 ## Demo Video
 if video is not visible, please see screenshots directory.
 https://github.com/RudraOp9/Calmly/raw/refs/heads/master/screenshots/vid.mkv
@@ -73,5 +69,4 @@ https://github.com/RudraOp9/Calmly/raw/refs/heads/master/screenshots/vid.mkv
 | <img src="/screenshots/ss3.png" width="250" height="500" > |
 
 
-// Readme.md reformated by Perplexity
-- 24 Hours is too less T_T
+// download the apk :)
